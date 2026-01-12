@@ -87,12 +87,14 @@ function App() {
         const templateConfig = Object.values(TEMPLATE_TYPES).find(
           (t) => t.id === id
         )
-        const score = calculateComplianceScore(content, templateConfig.tags)
-        const issues = validateTemplate(content, templateConfig.tags)
+        // Remove [link] from content as it's automatically appended by backend
+        const sanitizedContent = content.replace(/\[link\]/gi, '').trim()
+        const score = calculateComplianceScore(sanitizedContent, templateConfig.tags)
+        const issues = validateTemplate(sanitizedContent, templateConfig.tags)
 
         return {
           name: templateConfig.title,
-          content,
+          content: sanitizedContent,
           score,
           issues
         }
