@@ -52,6 +52,7 @@ SLACK_WEBHOOK_URL=your_slack_webhook_url
 ASANA_ACCESS_TOKEN=your_asana_token
 ASANA_PROJECT_ID=your_project_id
 ASANA_ASSIGNEE_GID=your_asana_user_gid
+ASANA_COLLABORATOR_GID=collaborator_asana_user_gid
 ```
 
 4. Start the development server:
@@ -83,7 +84,8 @@ vercel
 4. Set environment variables in Vercel dashboard:
    - Go to your project settings
    - Navigate to Environment Variables
-   - Add `SLACK_WEBHOOK_URL`, `ASANA_ACCESS_TOKEN`, `ASANA_PROJECT_ID`, and optionally `ASANA_ASSIGNEE_GID`
+   - Add `SLACK_WEBHOOK_URL`, `ASANA_ACCESS_TOKEN`, `ASANA_PROJECT_ID`
+   - Optionally add `ASANA_ASSIGNEE_GID` and `ASANA_COLLABORATOR_GID`
 
 ### Method 2: Using Vercel Dashboard
 
@@ -101,6 +103,7 @@ vercel
    - `ASANA_ACCESS_TOKEN`
    - `ASANA_PROJECT_ID`
    - `ASANA_ASSIGNEE_GID` (optional)
+   - `ASANA_COLLABORATOR_GID` (optional)
 
 5. Deploy!
 
@@ -124,19 +127,26 @@ vercel
    - Open your Asana project
    - Copy the project ID from the URL or use the Asana API
 
-3. Get the Assignee User GID (optional):
-   - You can find a user's GID by calling the Asana API:
-     ```bash
-     curl https://app.asana.com/api/1.0/users/me \
-       -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
-     ```
-   - Or search for users in your workspace:
-     ```bash
-     curl https://app.asana.com/api/1.0/users?workspace=YOUR_WORKSPACE_GID \
-       -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
-     ```
-   - The `gid` field in the response is what you need
-   - If not set, tasks will be created unassigned
+3. Get User GIDs (optional):
+   - **Assignee GID** - User who will be assigned the task (e.g., Marc Kuo)
+   - **Collaborator GID** - User who will be added as a follower and notified when task is completed (e.g., Sophie)
+
+   You can find a user's GID by calling the Asana API:
+   ```bash
+   curl https://app.asana.com/api/1.0/users/me \
+     -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+   ```
+
+   Or search for users in your workspace:
+   ```bash
+   curl https://app.asana.com/api/1.0/users?workspace=YOUR_WORKSPACE_GID \
+     -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+   ```
+
+   The `gid` field in the response is what you need for both variables.
+
+   - If `ASANA_ASSIGNEE_GID` is not set, tasks will be created unassigned
+   - If `ASANA_COLLABORATOR_GID` is not set, no follower will be added
 
 4. Add all values to environment variables
 

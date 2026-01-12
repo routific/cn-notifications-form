@@ -73,6 +73,7 @@ async function createAsanaTask(email, templates) {
   const accessToken = process.env.ASANA_ACCESS_TOKEN
   const projectId = process.env.ASANA_PROJECT_ID
   const assigneeGid = process.env.ASANA_ASSIGNEE_GID
+  const collaboratorGid = process.env.ASANA_COLLABORATOR_GID
 
   let description = `SMS Template Customization Request\n\n`
   description += `Submitted by: ${email}\n`
@@ -121,6 +122,11 @@ async function createAsanaTask(email, templates) {
   // Add assignee if configured
   if (assigneeGid) {
     taskData.data.assignee = assigneeGid
+  }
+
+  // Add collaborator as follower if configured
+  if (collaboratorGid) {
+    taskData.data.followers = [collaboratorGid]
   }
 
   const response = await fetch('https://app.asana.com/api/1.0/tasks', {
