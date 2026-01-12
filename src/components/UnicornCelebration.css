@@ -1,0 +1,274 @@
+.unicorn-celebration {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+/* Rainbow animations */
+.rainbow {
+  position: absolute;
+  width: 300px;
+  height: 150px;
+  border-radius: 300px 300px 0 0;
+  border: 8px solid transparent;
+  border-top-color: #ff0000;
+  border-left-color: #ff0000;
+  border-right-color: #ff0000;
+  opacity: 0;
+  animation: rainbowAppear 4s ease-in-out infinite;
+}
+
+.rainbow::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  right: -8px;
+  bottom: 0;
+  border-radius: 300px 300px 0 0;
+  border: 8px solid transparent;
+  border-top-color: #ff7f00;
+  border-left-color: #ff7f00;
+  border-right-color: #ff7f00;
+}
+
+.rainbow::after {
+  content: '';
+  position: absolute;
+  top: -16px;
+  left: -16px;
+  right: -16px;
+  bottom: 0;
+  border-radius: 300px 300px 0 0;
+  border: 8px solid transparent;
+  border-top-color: #ffff00;
+  border-left-color: #ffff00;
+  border-right-color: #ffff00;
+}
+
+.rainbow-1 {
+  top: 20%;
+  left: 10%;
+  animation-delay: 0s;
+  transform: rotate(-15deg);
+}
+
+.rainbow-2 {
+  top: 50%;
+  right: 15%;
+  animation-delay: 1.3s;
+  transform: rotate(15deg);
+}
+
+.rainbow-3 {
+  bottom: 10%;
+  left: 30%;
+  animation-delay: 2.6s;
+  transform: rotate(-10deg);
+}
+
+@keyframes rainbowAppear {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0.5) translateY(50px);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Unicorn animations */
+.unicorn {
+  position: absolute;
+  font-size: 4rem;
+  animation: unicornDance 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+
+.unicorn-1 {
+  top: 15%;
+  left: -10%;
+  animation-delay: 0s;
+}
+
+.unicorn-2 {
+  top: 40%;
+  right: -10%;
+  animation-delay: 0.7s;
+}
+
+.unicorn-3 {
+  bottom: 20%;
+  left: -10%;
+  animation-delay: 1.4s;
+}
+
+.unicorn-4 {
+  top: 60%;
+  right: -10%;
+  animation-delay: 2.1s;
+}
+
+@keyframes unicornDance {
+  0% {
+    transform: translateX(0) translateY(0) rotate(0deg) scale(1);
+  }
+  25% {
+    transform: translateX(30vw) translateY(-20px) rotate(10deg) scale(1.1);
+  }
+  50% {
+    transform: translateX(60vw) translateY(0) rotate(-10deg) scale(1);
+  }
+  75% {
+    transform: translateX(90vw) translateY(-15px) rotate(15deg) scale(1.1);
+  }
+  100% {
+    transform: translateX(120vw) translateY(0) rotate(0deg) scale(1);
+  }
+}
+
+/* Sparkle animations */
+.sparkles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.sparkle {
+  position: absolute;
+  font-size: 2rem;
+  animation: sparkleFloat 3s ease-in-out infinite;
+  opacity: 0;
+}
+
+.sparkle-1 {
+  top: 20%;
+  left: 25%;
+  animation-delay: 0s;
+}
+
+.sparkle-2 {
+  top: 30%;
+  right: 30%;
+  animation-delay: 0.4s;
+}
+
+.sparkle-3 {
+  top: 50%;
+  left: 15%;
+  animation-delay: 0.8s;
+}
+
+.sparkle-4 {
+  top: 60%;
+  right: 20%;
+  animation-delay: 1.2s;
+}
+
+.sparkle-5 {
+  bottom: 30%;
+  left: 40%;
+  animation-delay: 1.6s;
+}
+
+.sparkle-6 {
+  bottom: 20%;
+  right: 35%;
+  animation-delay: 2s;
+}
+
+.sparkle-7 {
+  top: 25%;
+  left: 50%;
+  animation-delay: 2.4s;
+}
+
+.sparkle-8 {
+  bottom: 40%;
+  left: 60%;
+  animation-delay: 2.8s;
+}
+
+@keyframes sparkleFloat {
+  0%, 100% {
+    opacity: 0;
+    transform: translateY(0) scale(0.5) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-30px) scale(1.2) rotate(180deg);
+  }
+}
+
+/* Celebration message */
+.celebration-message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  animation: messagePopIn 4s ease-in-out infinite;
+  opacity: 0;
+}
+
+.message-text {
+  font-family: 'Secular One', 'Open Sans', sans-serif;
+  font-size: 3rem;
+  color: var(--routific-orange);
+  text-shadow:
+    0 0 10px rgba(255, 255, 255, 1),
+    0 0 20px rgba(245, 80, 20, 0.8),
+    0 0 30px rgba(245, 80, 20, 0.6);
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.message-subtext {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1.5rem;
+  color: var(--routific-dark);
+  font-weight: 700;
+  text-shadow:
+    0 0 5px rgba(255, 255, 255, 0.8);
+}
+
+@keyframes messagePopIn {
+  0%, 20%, 80%, 100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  40%, 60% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .unicorn {
+    font-size: 2.5rem;
+  }
+
+  .sparkle {
+    font-size: 1.5rem;
+  }
+
+  .message-text {
+    font-size: 2rem;
+  }
+
+  .message-subtext {
+    font-size: 1rem;
+  }
+
+  .rainbow {
+    width: 200px;
+    height: 100px;
+  }
+}
