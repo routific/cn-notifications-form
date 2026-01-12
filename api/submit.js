@@ -72,6 +72,7 @@ async function sendSlackNotification(email, templates, asanaTaskUrl) {
 async function createAsanaTask(email, templates) {
   const accessToken = process.env.ASANA_ACCESS_TOKEN
   const projectId = process.env.ASANA_PROJECT_ID
+  const assigneeGid = process.env.ASANA_ASSIGNEE_GID
 
   let description = `SMS Template Customization Request\n\n`
   description += `Submitted by: ${email}\n`
@@ -103,12 +104,23 @@ async function createAsanaTask(email, templates) {
   description += `2. Copy the template content to the database\n`
   description += `3. Notify ${email} when templates are activated\n`
 
+  // Calculate tomorrow's date in YYYY-MM-DD format
+  const tomorrow = new Date()
+  tomorrow.setDate(tomorrow.getDate() + 1)
+  const dueDate = tomorrow.toISOString().split('T')[0]
+
   const taskData = {
     data: {
       name: `SMS Templates: ${email}`,
       notes: description,
       projects: [projectId],
+      due_on: dueDate,
     },
+  }
+
+  // Add assignee if configured
+  if (assigneeGid) {
+    taskData.data.assignee = assigneeGid
   }
 
   const response = await fetch('https://app.asana.com/api/1.0/tasks', {

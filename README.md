@@ -51,6 +51,7 @@ cp .env.example .env
 SLACK_WEBHOOK_URL=your_slack_webhook_url
 ASANA_ACCESS_TOKEN=your_asana_token
 ASANA_PROJECT_ID=your_project_id
+ASANA_ASSIGNEE_GID=your_asana_user_gid
 ```
 
 4. Start the development server:
@@ -82,7 +83,7 @@ vercel
 4. Set environment variables in Vercel dashboard:
    - Go to your project settings
    - Navigate to Environment Variables
-   - Add `SLACK_WEBHOOK_URL`, `ASANA_ACCESS_TOKEN`, and `ASANA_PROJECT_ID`
+   - Add `SLACK_WEBHOOK_URL`, `ASANA_ACCESS_TOKEN`, `ASANA_PROJECT_ID`, and optionally `ASANA_ASSIGNEE_GID`
 
 ### Method 2: Using Vercel Dashboard
 
@@ -99,6 +100,7 @@ vercel
    - `SLACK_WEBHOOK_URL`
    - `ASANA_ACCESS_TOKEN`
    - `ASANA_PROJECT_ID`
+   - `ASANA_ASSIGNEE_GID` (optional)
 
 5. Deploy!
 
@@ -122,7 +124,21 @@ vercel
    - Open your Asana project
    - Copy the project ID from the URL or use the Asana API
 
-3. Add both values to environment variables
+3. Get the Assignee User GID (optional):
+   - You can find a user's GID by calling the Asana API:
+     ```bash
+     curl https://app.asana.com/api/1.0/users/me \
+       -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+     ```
+   - Or search for users in your workspace:
+     ```bash
+     curl https://app.asana.com/api/1.0/users?workspace=YOUR_WORKSPACE_GID \
+       -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+     ```
+   - The `gid` field in the response is what you need
+   - If not set, tasks will be created unassigned
+
+4. Add all values to environment variables
 
 ## Custom Domain (Optional)
 
