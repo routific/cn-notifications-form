@@ -75,7 +75,7 @@ function TemplateSection({
                 color: 'var(--routific-gray)',
                 fontStyle: 'italic'
               }}>
-                (click to insert at cursor)
+                (click to insert)
               </span>
             </label>
             <div className="tag-chips">
