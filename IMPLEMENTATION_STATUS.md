@@ -17,6 +17,10 @@ All Linear tasks have been completed successfully!
   - Location: `src/components/TemplateSection.jsx` (integrated)
   - Features: Clickable chips, cursor position insertion, 44px touch targets
 
+- ✅ **ROUT-274:** Invalid tag detection and warnings
+  - Location: `src/utils/smsValidation.js`, `src/components/ValidationFeedback.jsx`
+  - Features: Real-time detection of invalid/mistyped tags with clear error messages
+
 ### Validation Engine (PLA-6)
 - ✅ **PLA-12:** Character count with encoding detection
   - Location: `src/utils/smsValidation.js`, `src/components/ValidationFeedback.jsx`

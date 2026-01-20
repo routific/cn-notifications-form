@@ -302,7 +302,7 @@ export function validateTemplate(text, validTags) {
   if (invalidTags.length > 0) {
     issues.push({
       type: 'error',
-      message: `Unrecognized tags: ${invalidTags.join(', ')}`
+      message: `Invalid tag${invalidTags.length > 1 ? 's' : ''} detected: ${invalidTags.join(', ')}. Please use only the tags provided above.`
     })
   }
 

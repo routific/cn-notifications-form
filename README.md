@@ -12,9 +12,9 @@ A standalone React application for customizing SMS delivery notifications with r
 
 - **Real-time Validation:**
   - Character count with GSM-7/UCS-2 encoding detection
-  - SHAFT compliance checking (Sex, Hate, Alcohol, Firearms, Tobacco)
+  - SHAFT-C compliance checking (Sex, Hate, Alcohol, Firearms, Tobacco, Cannabis)
   - URL and phone number detection
-  - Invalid tag detection
+  - Invalid tag detection with clear error messages
   - Excessive capitalization warnings
 
 - **Compliance Scoring:** 0-100 score with guidance
