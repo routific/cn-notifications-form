@@ -1,14 +1,24 @@
-# SMS Template Customizer
+# Notification Template Customizer
 
-A standalone React application for customizing SMS delivery notifications with real-time compliance validation.
+A standalone React application for customizing delivery notifications (SMS and Email) with real-time compliance validation.
 
 ## Features
 
-- **4 Customizable Templates:**
+### Notification Types
+
+Choose between two notification channels:
+- **SMS Templates** - Text message notifications with real-time compliance validation
+- **Email Templates** - Email notifications with custom subject lines and reply-to addresses
+
+### 4 Customizable Templates
+
+Both SMS and Email support the same notification events:
   - Delivery Scheduled
   - Out for Delivery
   - Delivery Completed
   - Delivery Missed
+
+### SMS Features
 
 - **Real-time Validation:**
   - Character count with GSM-7/UCS-2 encoding detection
@@ -20,14 +30,23 @@ A standalone React application for customizing SMS delivery notifications with r
 
 - **Compliance Scoring:** 0-100 score with guidance
 
-- **Integrations:**
-  - Slack notifications to your designated channel
-  - Asana task creation in your project
+### Email Features
 
-- **Easter Egg:**
-  - Hidden unicorn celebration (press Ctrl+Shift+U)
-  - Dancing unicorns on rainbows with sparkle effects
-  - Mobile-responsive magical animations
+- **Custom Subject Lines:** Personalize email subject with dynamic tags
+- **Multi-line Body Content:** Rich text formatting support
+- **Reply-To Configuration:** Set custom reply-to email address for your account
+- **Dynamic Tags:** Insert customer data like name, delivery time, tracking links
+
+### Integrations
+
+- Slack notifications to your designated channel
+- Asana task creation in your project with automatic assignment and due dates
+
+### Easter Egg
+
+- Hidden unicorn celebration (press Ctrl+Shift+U)
+- Dancing unicorns on rainbows with sparkle effects
+- Mobile-responsive magical animations
 
 ## Tech Stack
 
@@ -177,22 +196,26 @@ To use a custom domain (e.g., `sms-templates.yourdomain.com`):
 ```
 sms-customizer/
 ├── api/
-│   └── submit.js              # Vercel serverless function
+│   └── submit.js                      # Vercel serverless function
 ├── src/
 │   ├── components/
-│   │   ├── ComplianceScore.jsx
-│   │   ├── EmailInput.jsx
-│   │   ├── LoadingSpinner.jsx
-│   │   ├── SuccessMessage.jsx
-│   │   ├── TemplateSection.jsx
-│   │   └── ValidationFeedback.jsx
-│   ├── styles/
-│   │   └── index.css
+│   │   ├── ComplianceScore.jsx        # SMS compliance scoring display
+│   │   ├── EmailForm.jsx              # Email template form
+│   │   ├── EmailInput.jsx             # Reusable email input
+│   │   ├── EmailTemplateSection.jsx   # Email template editor
+│   │   ├── LoadingSpinner.jsx         # Loading indicator
+│   │   ├── NotificationTypeSelector.jsx # SMS vs Email chooser
+│   │   ├── SMSForm.jsx                # SMS template form
+│   │   ├── SuccessMessage.jsx         # Success confirmation
+│   │   ├── TemplateSection.jsx        # SMS template editor
+│   │   ├── UnicornCelebration.jsx     # Easter egg component
+│   │   └── ValidationFeedback.jsx     # SMS validation display
 │   ├── utils/
-│   │   ├── smsValidation.js   # Validation logic
-│   │   └── templateConfig.js  # Template configurations
-│   ├── App.jsx
-│   └── main.jsx
+│   │   ├── emailTemplateConfig.js     # Email template configs
+│   │   ├── smsValidation.js           # SMS validation logic
+│   │   └── templateConfig.js          # SMS template configs
+│   ├── App.jsx                        # Main app with routing
+│   └── main.jsx                       # Entry point
 ├── index.html
 ├── package.json
 ├── vercel.json

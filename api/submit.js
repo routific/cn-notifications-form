@@ -4,7 +4,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { email, templates } = req.body
+    const { email, templates, type = 'sms', replyTo } = req.body
 
     if (!email || !templates) {
       return res.status(400).json({ error: 'Missing required fields' })
@@ -13,12 +13,12 @@ export default async function handler(req, res) {
     // Create Asana task first to get the task URL
     let asanaTaskUrl = null
     if (process.env.ASANA_ACCESS_TOKEN && process.env.ASANA_PROJECT_ID) {
-      asanaTaskUrl = await createAsanaTask(email, templates)
+      asanaTaskUrl = await createAsanaTask(email, templates, type, replyTo)
     }
 
     // Send Slack notification with link to Asana task
     if (process.env.SLACK_WEBHOOK_URL) {
-      await sendSlackNotification(email, templates, asanaTaskUrl)
+      await sendSlackNotification(email, templates, type, replyTo, asanaTaskUrl)
     }
 
     res.status(200).json({ success: true })
@@ -28,10 +28,17 @@ export default async function handler(req, res) {
   }
 }
 
-async function sendSlackNotification(email, templates, asanaTaskUrl) {
+async function sendSlackNotification(email, templates, type, replyTo, asanaTaskUrl) {
   const webhookUrl = process.env.SLACK_WEBHOOK_URL
 
-  let message = `📱 *New SMS Template Request*\n\n*Email:* ${email}\n`
+  const icon = type === 'email' ? '📧' : '📱'
+  const typeLabel = type === 'email' ? 'Email' : 'SMS'
+
+  let message = `${icon} *New ${typeLabel} Template Request*\n\n*Email:* ${email}\n`
+
+  if (type === 'email' && replyTo) {
+    message += `*Reply-To:* ${replyTo}\n`
+  }
 
   if (asanaTaskUrl) {
     message += `*Asana Task:* ${asanaTaskUrl}\n`
@@ -40,17 +47,30 @@ async function sendSlackNotification(email, templates, asanaTaskUrl) {
   message += `\n*Templates Submitted:* ${templates.length}\n\n`
 
   templates.forEach((template) => {
-    if (template.content) {
-      message += `*${template.name}* (Compliance Score: ${template.score}/100)\n`
-      message += `\`\`\`${template.content}\`\`\`\n`
-
-      if (template.issues && template.issues.length > 0) {
-        message += `⚠️ Issues:\n`
-        template.issues.forEach((issue) => {
-          message += `  • ${issue.message}\n`
-        })
+    if (type === 'email') {
+      // Email template format
+      message += `*${template.name}*\n`
+      if (template.subject) {
+        message += `*Subject:* ${template.subject}\n`
+      }
+      if (template.content) {
+        message += `*Body:*\n\`\`\`${template.content}\`\`\`\n`
       }
       message += `\n`
+    } else {
+      // SMS template format
+      if (template.content) {
+        message += `*${template.name}* (Compliance Score: ${template.score}/100)\n`
+        message += `\`\`\`${template.content}\`\`\`\n`
+
+        if (template.issues && template.issues.length > 0) {
+          message += `⚠️ Issues:\n`
+          template.issues.forEach((issue) => {
+            message += `  • ${issue.message}\n`
+          })
+        }
+        message += `\n`
+      }
     }
   })
 
@@ -69,41 +89,66 @@ async function sendSlackNotification(email, templates, asanaTaskUrl) {
   }
 }
 
-async function createAsanaTask(email, templates) {
+async function createAsanaTask(email, templates, type = 'sms', replyTo) {
   const accessToken = process.env.ASANA_ACCESS_TOKEN
   const projectId = process.env.ASANA_PROJECT_ID
   const assigneeGid = process.env.ASANA_ASSIGNEE_GID
   const collaboratorGid = process.env.ASANA_COLLABORATOR_GID
 
-  let description = `SMS Template Customization Request\n\n`
+  const typeLabel = type === 'email' ? 'Email' : 'SMS'
+
+  let description = `${typeLabel} Template Customization Request\n\n`
   description += `Submitted by: ${email}\n`
+  if (type === 'email' && replyTo) {
+    description += `Reply-To: ${replyTo}\n`
+  }
   description += `Total templates: ${templates.length}\n\n`
   description += `==========================================\n\n`
 
   templates.forEach((template, index) => {
-    if (template.content) {
+    if (type === 'email') {
+      // Email template format
       description += `## ${index + 1}. ${template.name}\n\n`
-      description += `**Compliance Score:** ${template.score}/100\n\n`
-      description += `**Template Content (Copy this to DB):**\n`
-      description += `${template.content}\n\n`
-
-      if (template.issues && template.issues.length > 0) {
-        description += `**⚠️ Validation Issues:**\n`
-        template.issues.forEach((issue) => {
-          const emoji = issue.type === 'error' ? '❌' : '⚠️'
-          description += `${emoji} ${issue.message}\n`
-        })
-        description += `\n`
+      if (template.subject) {
+        description += `**Subject (Copy this to DB):**\n`
+        description += `${template.subject}\n\n`
       }
-
+      if (template.content) {
+        description += `**Body (Copy this to DB):**\n`
+        description += `${template.content}\n\n`
+      }
       description += `------------------------------------------\n\n`
+    } else {
+      // SMS template format
+      if (template.content) {
+        description += `## ${index + 1}. ${template.name}\n\n`
+        description += `**Compliance Score:** ${template.score}/100\n\n`
+        description += `**Template Content (Copy this to DB):**\n`
+        description += `${template.content}\n\n`
+
+        if (template.issues && template.issues.length > 0) {
+          description += `**⚠️ Validation Issues:**\n`
+          template.issues.forEach((issue) => {
+            const emoji = issue.type === 'error' ? '❌' : '⚠️'
+            description += `${emoji} ${issue.message}\n`
+          })
+          description += `\n`
+        }
+
+        description += `------------------------------------------\n\n`
+      }
     }
   })
 
   description += `\n**Action Required:**\n`
   description += `1. Review each template above\n`
   description += `2. Copy the template content to the database\n`
-  description += `3. Notify ${email} when templates are activated\n`
+  if (type === 'email' && replyTo) {
+    description += `3. Update the reply-to address for ${email}\n`
+    description += `4. Notify ${email} when templates are activated\n`
+  } else {
+    description += `3. Notify ${email} when templates are activated\n`
+  }
 
   // Calculate tomorrow's date in YYYY-MM-DD format
   const tomorrow = new Date()
@@ -112,7 +157,7 @@ async function createAsanaTask(email, templates) {
 
   const taskData = {
     data: {
-      name: `SMS Templates: ${email}`,
+      name: `${typeLabel} Templates: ${email}`,
       notes: description,
       projects: [projectId],
       due_on: dueDate,
