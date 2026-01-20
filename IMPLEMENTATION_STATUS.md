@@ -32,7 +32,7 @@ All Linear tasks have been completed successfully!
 
 - ✅ **PLA-14:** URL, phone, caps, and invalid tag detection
   - Location: `src/utils/smsValidation.js`
-  - Features: URL patterns, phone number patterns, >50% caps detection, invalid tag checking
+  - Features: URL patterns with specific URLs shown in warnings, phone number patterns, >50% caps detection, invalid tag checking with explicit deliverability impact messaging
 
 - ✅ **PLA-15:** Compliance score calculation and display
   - Location: `src/utils/smsValidation.js`, `src/components/ComplianceScore.jsx`

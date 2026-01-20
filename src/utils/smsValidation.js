@@ -276,7 +276,7 @@ export function validateTemplate(text, validTags) {
   if (urls.length > 0) {
     issues.push({
       type: 'warning',
-      message: 'URLs may reduce deliverability. Consider removing.'
+      message: `URL${urls.length > 1 ? 's' : ''} detected (${urls.join(', ')}). URLs significantly reduce SMS deliverability and may affect approval of this template.`
     })
   }
 
@@ -285,7 +285,7 @@ export function validateTemplate(text, validTags) {
   if (phones.length > 0) {
     issues.push({
       type: 'warning',
-      message: 'Phone numbers may trigger spam filters.'
+      message: `Phone number${phones.length > 1 ? 's' : ''} detected. This may trigger spam filters and affect deliverability.`
     })
   }
 
