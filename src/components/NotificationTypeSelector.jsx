@@ -113,7 +113,7 @@ function NotificationTypeSelector({ onSelect }) {
               e.currentTarget.style.boxShadow = 'none'
             }}
           >
-            <div style={{ fontSize: '3rem', marginBottom: '0.75rem' }}>📧</div>
+            <div style={{ fontSize: '3rem', marginBottom: '0.75rem' }}>✉️</div>
             <h3 style={{
               color: 'var(--routific-dark)',
               fontSize: '1.25rem',
